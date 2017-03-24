@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -35,17 +35,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     CustomViewAdapter adapter;
     EditText inputSearch;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        txtTst=(TextView)findViewById(R.id.txtTest);
-
-
+        txtTst = (TextView) findViewById(R.id.txtTest);
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         android.net.NetworkInfo wifi = cm
@@ -55,22 +49,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if ((wifi != null & datac != null)
                 && (wifi.isConnected() | datac.isConnected())) {
             setContentView(R.layout.activity_main);
-        }else{
+        } else {
             //no connection
             Toast toast = Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_LONG);
             toast.show();
         }
+        array = new ArrayList<>();
 
-
-        array=new ArrayList<>();
-
-
-        listView=(ListView) findViewById(R.id.listV);
+        listView = (ListView) findViewById(R.id.listV);
         listView.setOnItemClickListener(this);
 
         inputSearch = (EditText) findViewById(R.id.inputSearch);
-        adapter = new CustomViewAdapter(getApplicationContext(),R.layout.list_item, array);
-
+        adapter = new CustomViewAdapter(getApplicationContext(), R.layout.list_item, array);
 
 
         inputSearch.addTextChangedListener(new TextWatcher() {
@@ -105,51 +95,39 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         listView.setAdapter(adapter);
 
-        runOnUiThread(  new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 new ReadJSON().execute("https://script.google.com/macros/s/AKfycbygukdW3tt8sCPcFDlkMnMuNu9bH5fpt7bKV50p2bM/exec?id=1wLX4gpmiyx8X7a-ByJBH_FB00r3bf32J1yodVNKOdek&sheet=music");
             }
         });
-
-
-
-
     }
 
 
-
-
-
-    class ReadJSON extends AsyncTask<String,Integer,String> {
-
-
+    class ReadJSON extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... params) {
             return readURL(params[0]);
         }
 
         @Override
-        protected void onPostExecute(String content){
-
+        protected void onPostExecute(String content) {
             try {
-                JSONObject jsonObject=new JSONObject(content);
-                JSONArray jsonArray=jsonObject.getJSONArray("music");
+                JSONObject jsonObject = new JSONObject(content);
+                JSONArray jsonArray = jsonObject.getJSONArray("music");
 
-                for(int i=0;i<jsonArray.length();i++){
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject prdobj = jsonArray.getJSONObject(i);
 
-                    String image1= prdobj.getString("image");
-                    String name1=prdobj.getString("name");
-                    String video1=prdobj.getString("video");
-                    String id1=prdobj.getString("id");
+                    String image1 = prdobj.getString("image");
+                    String name1 = prdobj.getString("name");
+                    String video1 = prdobj.getString("video");
+                    String id1 = prdobj.getString("id");
 
-
-                    array.add(new Music(image1,name1,video1,id1));
-
-
+                    array.add(new Music(image1, name1, video1, id1));
                 }
 
+                adapter.setWholeList(array);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -158,30 +136,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //            CustomViewAdapter adapter=new CustomViewAdapter(getApplicationContext(),R.layout.list_item, array);
 //            listView.setAdapter(adapter);
         }
-
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Music prod = array.get(position);
+        String image = prod.getImage();
+        String name = prod.getName();
+        String video = prod.getVideo();
 
-        Music prod =array.get(position);
-        String image=prod.getImage();
-        String name=prod.getName();
-        String video=prod.getVideo();
+        Intent intent = new Intent(getApplicationContext(), Video_Page.class);
 
-        Intent intent=new Intent(getApplicationContext(),Video_Page.class);
-
-        intent.putExtra("image",image);
-        intent.putExtra("name",name);
-        intent.putExtra("video",video);
+        intent.putExtra("image", image);
+        intent.putExtra("name", name);
+        intent.putExtra("video", video);
 
         startActivity(intent);
     }
 
-
-
     private static String readURL(String theUrl) {
-
         StringBuilder content = new StringBuilder();
 
         try {
@@ -199,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             e.printStackTrace();
         }
         return content.toString();
-
     }
 
 }

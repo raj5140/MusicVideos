@@ -7,12 +7,11 @@ public class Music {
     private String video;
     private String id;
 
-    public Music(String image, String name, String video, String id){
-
+    public Music(String image, String name, String video, String id) {
         this.setId(id);
-        this.image=image;
-        this.name=name;
-        this.video=video;
+        this.image = image;
+        this.name = name;
+        this.video = video;
     }
 
     public String getImage() {
@@ -38,7 +37,6 @@ public class Music {
     public void setVideo(String video) {
         this.video = video;
     }
-
 
     public String getId() {
         return id;
