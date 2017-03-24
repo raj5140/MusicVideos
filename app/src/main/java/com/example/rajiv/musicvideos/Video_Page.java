@@ -20,7 +20,6 @@ public class Video_Page extends YouTubeBaseActivity {
     YouTubePlayerView youTubePlayerView;
     YouTubePlayer.OnInitializedListener onInitializedListener;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -35,12 +34,9 @@ public class Video_Page extends YouTubeBaseActivity {
 
         youTubePlayerView=(YouTubePlayerView)findViewById(R.id.viewY);
 
-
         onInitializedListener = new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-
-
                 youTubePlayer.loadVideo(video1);
 
             }
@@ -58,7 +54,5 @@ public class Video_Page extends YouTubeBaseActivity {
 
             }
         });
-
-
     }
 }
